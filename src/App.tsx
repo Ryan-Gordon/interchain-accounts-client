@@ -5,13 +5,14 @@ import './App.css';
 import { DirectSecp256k1HdWallet, Registry } from "@cosmjs/proto-signing";
 import { defaultRegistryTypes, SigningStargateClient } from "@cosmjs/stargate";
 import { MsgRegisterAccount, MsgSend } from "./codec/intertx/tx";
+
 const myRegistry = new Registry([
   ...defaultRegistryTypes,
   ["/register.account", MsgSend],
   ["/test", MsgRegisterAccount]
 ]);
 const mnemonic = // Replace with your own mnemonic
-  "economy stock theory fatal elder harbor betray wasp final emotion task crumble siren bottom lizard educate guess current outdoor pair theory focus wife stone";
+  "alley afraid soup fall idea toss can goose become valve initial strong forward bright dish figure check leopard decide warfare hub unusual join cart";
 
 
 async function makeBroadcastTx() {
@@ -21,28 +22,30 @@ async function makeBroadcastTx() {
     { prefix: "cosmos1" }, // Replace with your own Bech32 address prefix
   );
   const client = await SigningStargateClient.connectWithSigner(
-    "my.endpoint.com", // Replace with your own RPC endpoint
+    "localhost:16657", // Replace with your own RPC endpoint
     signer,
     {
       registry: myRegistry,
     },
   );
 
-  const myAddress = "wasm1pkptre7fdkl6gfrzlesjjvhxhlc3r4gm32kke3";
+  const myAddress = "cosmos1mjk79fjjgpplak5wq838w0yd982gzkyfrk07am";
   const message = {
     typeUrl: "/register.account", // Same as above
     value: {
-      foo: "bar",
+      owner: myAddress,
+      sourcePort: "ibcaccount",
+      sourceChannel: "channel-0"
     },
   };
   const fee = {
     amount: [
       {
-        denom: "udenom", // Use the appropriate fee denom for your chain
-        amount: "120000",
+        denom: "stake", // Use the appropriate fee denom for your chain
+        amount: "200000",
       },
     ],
-    gas: "10000",
+    gas: "200000",
   };
   // Inside an async function...
   // This method uses the registry you provided
