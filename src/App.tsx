@@ -1,8 +1,52 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { DirectSecp256k1HdWallet, Registry } from "@cosmjs/proto-signing";
+import { defaultRegistryTypes, SigningStargateClient } from "@cosmjs/stargate";
 
 function App() {
+  const myRegistry = new Registry([
+    ...defaultRegistryTypes, // Replace with your own type URL and Msg class
+  ]);
+  const mnemonic = // Replace with your own mnemonic
+    "economy stock theory fatal elder harbor betray wasp final emotion task crumble siren bottom lizard educate guess current outdoor pair theory focus wife stone";
+  
+  // Inside an async function...
+  const signer = await DirectSecp256k1HdWallet.fromMnemonic(
+    mnemonic,
+    { prefix: "myprefix" }, // Replace with your own Bech32 address prefix
+  );
+  const client = await SigningStargateClient.connectWithSigner(
+    "my.endpoint.com", // Replace with your own RPC endpoint
+    signer,
+    {
+      registry: myRegistry,
+    },
+  );
+
+
+  async function makeBroadcastTx() {
+    const myAddress = "wasm1pkptre7fdkl6gfrzlesjjvhxhlc3r4gm32kke3";
+    const message = {
+      typeUrl: "/my.custom.MsgXxx", // Same as above
+      value: {
+        foo: "bar",
+      },
+    };
+    const fee = {
+      amount: [
+        {
+          denom: "udenom", // Use the appropriate fee denom for your chain
+          amount: "120000",
+        },
+      ],
+      gas: "10000",
+    };
+
+    // Inside an async function...
+    // This method uses the registry you provided
+    const response = await client.signAndBroadcast(myAddress, [message], fee);
+  }
   return (
     <div className="App">
       <header className="App-header">
