@@ -4,31 +4,33 @@ import logo from './logo.svg';
 import './App.css';
 import { DirectSecp256k1HdWallet, Registry } from "@cosmjs/proto-signing";
 import { defaultRegistryTypes, SigningStargateClient } from "@cosmjs/stargate";
-import { MsgRegisterAccount } from "./codec/intertx/tx";
+import { MsgRegisterAccount, MsgSend } from "./codec/intertx/tx";
 const myRegistry = new Registry([
   ...defaultRegistryTypes,
-  ["/register.account", MsgRegisterAccount] // Replace with your own type URL and Msg class
+  ["/register.account", MsgSend],
+  ["/test", MsgRegisterAccount]
 ]);
 const mnemonic = // Replace with your own mnemonic
   "economy stock theory fatal elder harbor betray wasp final emotion task crumble siren bottom lizard educate guess current outdoor pair theory focus wife stone";
 
-// Inside an async function...
-const signer = await DirectSecp256k1HdWallet.fromMnemonic(
-  mnemonic,
-  { prefix: "myprefix" }, // Replace with your own Bech32 address prefix
-);
-const client = await SigningStargateClient.connectWithSigner(
-  "my.endpoint.com", // Replace with your own RPC endpoint
-  signer,
-  {
-    registry: myRegistry,
-  },
-);
 
 async function makeBroadcastTx() {
+  // Inside an async function...
+  const signer = await DirectSecp256k1HdWallet.fromMnemonic(
+    mnemonic,
+    { prefix: "cosmos1" }, // Replace with your own Bech32 address prefix
+  );
+  const client = await SigningStargateClient.connectWithSigner(
+    "my.endpoint.com", // Replace with your own RPC endpoint
+    signer,
+    {
+      registry: myRegistry,
+    },
+  );
+
   const myAddress = "wasm1pkptre7fdkl6gfrzlesjjvhxhlc3r4gm32kke3";
   const message = {
-    typeUrl: "/my.custom.MsgXxx", // Same as above
+    typeUrl: "/register.account", // Same as above
     value: {
       foo: "bar",
     },
@@ -48,7 +50,7 @@ async function makeBroadcastTx() {
 }
 
 class App extends Component {
-  
+
   render() {
     return (
       <div className="App">
