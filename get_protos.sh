@@ -17,3 +17,7 @@ wget -qO "$ZIP_FILE" "https://github.com/cosmos/cosmos-sdk/archive/$COSMOS_SDK_R
 unzip "$ZIP_FILE" "*.proto" -d "$COSMOS_DIR"
 mv "$COSMOS_SDK_DIR-$SUFFIX" "$COSMOS_SDK_DIR"
 rm "$ZIP_FILE"
+
+
+
+
