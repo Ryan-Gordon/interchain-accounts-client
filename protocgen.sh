@@ -46,6 +46,7 @@ protoc \
   "$ROOT_PROTO_DIR/ibc/core/connection/v1/connection.proto" \
   "$ROOT_PROTO_DIR/ibc/core/connection/v1/query.proto" \
   "$ROOT_PROTO_DIR/ibc/core/connection/v1/tx.proto" \
+  "$ROOT_PROTO_DIR/ibc/account/account.proto" \
   "$ROOT_PROTO_DIR/ibc/lightclients/tendermint/v1/tendermint.proto" \
   "$THIRD_PARTY_PROTO_DIR/confio/proofs.proto" \
   "$THIRD_PARTY_PROTO_DIR/tendermint/abci/types.proto" \
@@ -57,6 +58,7 @@ protoc \
   "$THIRD_PARTY_PROTO_DIR/tendermint/types/validator.proto" \
   "$THIRD_PARTY_PROTO_DIR/tendermint/version/types.proto" \
   "./proto/intertx/tx.proto" \
+  "./proto/intertx/query.proto" \
 
 # Remove unnecessary codec files
 rm -rf \

@@ -1,0 +1,32 @@
+syntax = "proto3";
+package intertx;
+
+option go_package = "github.com/cosmos/interchain-accounts/x/inter-tx/types";
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "ibc/core/client/v1/client.proto";
+import "ibc/account/account.proto";
+
+// Query defines the gRPC querier service.
+service Query {
+  rpc IBCAccountFromAddress(QueryIBCAccountFromAddressRequest) returns (QueryIBCAccountFromAddressResponse); 
+}
+
+message QueryIBCAccountFromAddressRequest {
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  string port = 1;
+  string channel = 2;
+  bytes address = 3
+    [ (gogoproto.casttype) =
+       "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+}
+ 
+message QueryIBCAccountFromAddressResponse {
+  bytes address = 1
+        [ (gogoproto.casttype) =
+       "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+}
+
