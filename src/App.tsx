@@ -4,12 +4,11 @@ import logo from './logo.svg';
 import './App.css';
 import { DirectSecp256k1HdWallet, Registry } from "@cosmjs/proto-signing";
 import { defaultRegistryTypes, SigningStargateClient } from "@cosmjs/stargate";
-import { MsgRegisterAccount, MsgSend } from "./codec/intertx/tx";
+import { MsgRegisterAccount } from "./codec/intertx/tx";
 
 const myRegistry = new Registry([
   ...defaultRegistryTypes,
-  ["/register.account", MsgSend],
-  ["/test", MsgRegisterAccount]
+  ["/register.account", MsgRegisterAccount]
 ]);
 const mnemonic = // Replace with your own mnemonic
   "alley afraid soup fall idea toss can goose become valve initial strong forward bright dish figure check leopard decide warfare hub unusual join cart";
