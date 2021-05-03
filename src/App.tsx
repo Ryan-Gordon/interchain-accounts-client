@@ -2,14 +2,17 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import logo from './logo.svg';
 import './App.css';
-import { DirectSecp256k1HdWallet, Registry } from "@cosmjs/proto-signing";
+import { DirectSecp256k1HdWallet, Registry, GeneratedType } from "@cosmjs/proto-signing";
 import { defaultRegistryTypes, SigningStargateClient } from "@cosmjs/stargate";
 import { MsgRegisterAccount } from "./codec/intertx/tx";
 
+const myTypes: ReadonlyArray<[string, GeneratedType]> = [["/register.account", MsgRegisterAccount]]
+
 const myRegistry = new Registry([
   ...defaultRegistryTypes,
-  ["/register.account", MsgRegisterAccount]
+  ...myTypes,
 ]);
+
 const mnemonic = // Replace with your own mnemonic
   "alley afraid soup fall idea toss can goose become valve initial strong forward bright dish figure check leopard decide warfare hub unusual join cart";
 
