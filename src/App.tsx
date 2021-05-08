@@ -6,6 +6,7 @@ import { DirectSecp256k1HdWallet, Registry, GeneratedType } from "@cosmjs/proto-
 import { createProtobufRpcClient, QueryClient } from "@cosmjs/stargate";
 import { toAccAddress } from "@cosmjs/stargate/build/queries/utils"
 import { defaultRegistryTypes, SigningStargateClient } from "@cosmjs/stargate";
+import { setupBankExtension } from "@cosmjs/stargate/build/queries/bank"
 import { Bech32 } from "@cosmjs/encoding"
 import { MsgRegisterAccount } from "./codec/intertx/tx";
 import { QueryClientImpl } from "./codec/intertx/query";
@@ -97,11 +98,41 @@ async function makeAddressQueryTx() {
   console.log(Bech32.encode("cosmos", queryResult.address))
 }
 
+async function makeBankQueryTx(queryAddress: string) {
+  // The Tendermint client knows how to talk to the Tendermint RPC endpoint
+  const tendermintClient = await Tendermint34Client.connect(DEFAULT_ENDPOINT);
+
+  // The generic Stargate query client knows how to use the Tendermint client to submit unverified ABCI queries
+  // const queryClient = new QueryClient(tendermintClient);
+  const queryClient = QueryClient.withExtensions(
+    tendermintClient,
+    setupBankExtension,
+    // You can add up to 8 extensions
+  );
+  
+  // // Inside an async function...
+  // // Now your query client has been extended
+  // const queryResult = await queryClient.my.nested.customQuery("bar");
+
+  // This helper function wraps the generic Stargate query client for use by the specific generated query client
+  const rpcClient = createProtobufRpcClient(queryClient);
+
+  // Here we instantiate a specific query client which will have the custom methods defined in the .proto file
+  const queryService = new QueryClientImpl(rpcClient);
+  
+
+  // Now you can use this service to submit queries
+  const queryResult = await queryClient.bank.balance(queryAddress, "stake")
+  console.log("Finished Request")
+  console.log(`Account ${queryAddress} has a balance of ${queryResult.amount} ${queryResult.denom}`)
+}
+
 class App extends Component {
 
   render() {
     makeBroadcastTx()
     makeAddressQueryTx()
+    makeBankQueryTx("cosmos1pt6ar8lawmvvq5haxc3l3zhjfl04u56fs2ndh9")
     return (
       <div className="App">
         <header className="App-header">
