@@ -3,9 +3,10 @@ import ReactDOM from "react-dom";
 import logo from './logo.svg';
 import './App.css';
 import { DirectSecp256k1HdWallet, Registry, GeneratedType } from "@cosmjs/proto-signing";
-import { createPagination, createRpc, QueryClient } from "@cosmjs/stargate";
+import { createProtobufRpcClient, QueryClient } from "@cosmjs/stargate";
+import { toAccAddress } from "@cosmjs/stargate/build/queries/utils"
 import { defaultRegistryTypes, SigningStargateClient } from "@cosmjs/stargate";
-import { makeCosmoshubPath, Secp256k1HdWallet, SigningCosmosClient } from "@cosmjs/launchpad";
+import { Bech32 } from "@cosmjs/encoding"
 import { MsgRegisterAccount } from "./codec/intertx/tx";
 import { QueryClientImpl } from "./codec/intertx/query";
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
@@ -68,8 +69,8 @@ async function makeBroadcastTx() {
   // Inside an async function...
   // This method uses the registry you provided
   const response = await client.signAndBroadcast(myAddress, [message], fee);
-  console.log("Finished Request")
-  console.log(response)
+  console.log("Finished register Request")
+
 }
 
 async function makeAddressQueryTx() {
@@ -81,44 +82,19 @@ async function makeAddressQueryTx() {
   const queryClient = new QueryClient(tendermintClient);
 
   // This helper function wraps the generic Stargate query client for use by the specific generated query client
-  const rpcClient = createRpc(queryClient);
+  const rpcClient = createProtobufRpcClient(queryClient);
 
   // Here we instantiate a specific query client which will have the custom methods defined in the .proto file
   const queryService = new QueryClientImpl(rpcClient);
 
   // Now you can use this service to submit queries
-  const encodedAddress = new TextEncoder().encode(queryAddress)
-  console.log(encodedAddress)
   const queryResult = await queryService.IBCAccountFromAddress({
-    address: encodedAddress,
+    address: toAccAddress(queryAddress),
     port: "ibcaccount",
     channel: "channel-0"
   });
   console.log("Finished Request")
-  console.log(queryResult)
-
-  // TODO: to be removed, approach #2 if above does not work 
-  // const message = {
-  //   typeUrl: "/intertx.Query", // Same as above
-  //   value: {
-  //     address: queryAddress,
-  //     port: "ibcaccount",
-  //     channel: "channel-0"
-  //   },
-  // };
-  // const fee = {
-  //   amount: [
-  //     {
-  //       denom: "stake", // Use the appropriate fee denom for your chain
-  //       amount: "90000",
-  //     },
-  //   ],
-  //   gas: "90000",
-  // };
-  // // This method uses the registry you provided
-  // const response = await client.signAndBroadcast(queryAddress, [message], fee);
-  // console.log("Finished Request")
-  // console.log(response)
+  console.log(Bech32.encode("cosmos", queryResult.address))
 }
 
 class App extends Component {

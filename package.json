@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@cosmjs/encoding": "^0.25.1",
     "@cosmjs/proto-signing": "^v0.25.0-alpha.3",
     "@cosmjs/stargate": "^v0.25.0-alpha.3",
     "@cosmjs/tendermint-rpc": "^v0.25.0-alpha.3",
