@@ -57,6 +57,7 @@ protoc \
   "$THIRD_PARTY_PROTO_DIR/tendermint/types/types.proto" \
   "$THIRD_PARTY_PROTO_DIR/tendermint/types/validator.proto" \
   "$THIRD_PARTY_PROTO_DIR/tendermint/version/types.proto" \
+  "./proto/intertx/intertx.proto" \
   "./proto/intertx/tx.proto" \
   "./proto/intertx/query.proto" \
 
