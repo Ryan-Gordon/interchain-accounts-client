@@ -1,4 +1,4 @@
-import { DirectSecp256k1HdWallet, Registry, GeneratedType } from "@cosmjs/proto-signing";
+import { DirectSecp256k1HdWallet, Registry } from "@cosmjs/proto-signing";
 import { createProtobufRpcClient, QueryClient } from "@cosmjs/stargate";
 import { toAccAddress } from "@cosmjs/stargate/build/queries/utils"
 import { defaultRegistryTypes, SigningStargateClient, coins } from "@cosmjs/stargate";
@@ -8,11 +8,10 @@ import { MsgRegisterAccount, MsgSend as InterTxMsgSend } from "../codec/intertx/
 import { QueryClientImpl } from "../codec/intertx/query";
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
 
-const myTypes: ReadonlyArray<[string, GeneratedType]> = [["/intertx.MsgRegisterAccount", MsgRegisterAccount],["/intertx.MsgSend", InterTxMsgSend]]
-
 const myRegistry = new Registry([
   ...defaultRegistryTypes,
-  ...myTypes,
+  ["/intertx.MsgRegisterAccount", MsgRegisterAccount],
+  ["/intertx.MsgSend", InterTxMsgSend],
 ]);
 
 const MNEMONIC_1 = // Replace with your own mnemonic
