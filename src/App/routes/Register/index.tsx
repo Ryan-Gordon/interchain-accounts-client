@@ -17,7 +17,7 @@ import * as jdenticon from 'jdenticon'
 
 export function Register(): JSX.Element {
   const [loading, setLoading] = React.useState(false);
-  const [address, setAddress] = React.useState("sdfdadasdassf");
+  const [address, setAddress] = React.useState("");
   const submitRegistration = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
