@@ -6,7 +6,7 @@ export function Home(): JSX.Element {
 
     return (
         <div>
-        <Grid container direction="column" justify="space-between" alignItems="center">
+        <Grid container direction="column" alignItems="center">
           <Grid>
             <Button
               variant="contained"
