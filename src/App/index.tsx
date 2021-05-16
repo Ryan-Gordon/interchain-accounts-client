@@ -10,10 +10,9 @@ export function App(): JSX.Element {
   return (
       <Router basename={process.env.PUBLIC_URL}>
         <Switch>
-          <Route exact path={pathHome} component={Home} />
           <Route exact path={pathRegister} component={Register} />
           
-          <Route component={() => <Redirect to={pathHome} />} />
+          <Route component={() => <Redirect to={pathRegister} />} />
         </Switch>
       </Router>
   );
